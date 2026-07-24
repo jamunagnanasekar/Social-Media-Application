@@ -1,3 +1,4 @@
+import Profile from "./pages/Profile";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -10,38 +11,48 @@ import PublicRoute from "./routes/PublicRoute";
 
 function App() {
   return (
-    <Routes>
+   <Routes>
 
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
+  <Route
+    path="/"
+    element={
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    }
+  />
 
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
+  {/* Add this here */}
+  <Route
+    path="/profile/:username"
+    element={
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    }
+  />
 
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        }
-      />
+  <Route
+    path="/login"
+    element={
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    }
+  />
 
-      <Route path="*" element={<NotFound />} />
+  <Route
+    path="/register"
+    element={
+      <PublicRoute>
+        <Register />
+      </PublicRoute>
+    }
+  />
 
-    </Routes>
+  <Route path="*" element={<NotFound />} />
+
+</Routes>
   );
 }
 

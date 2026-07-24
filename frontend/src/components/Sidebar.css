@@ -1,15 +1,20 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 2rem);
+
   position: sticky;
   top: 1rem;
+
+  min-height: calc(100vh - 2rem);
+
   padding: 1.25rem;
-  background-color: var(--bg-secondary);
+
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+
+  overflow: hidden;
 }
 
 .sidebar-brand {
@@ -43,6 +48,7 @@
   flex-direction: column;
   gap: 0.4rem;
   flex: 1;
+  min-height: 0;
 }
 
 .nav-item {
@@ -94,12 +100,18 @@
 }
 
 .sidebar-footer {
+  margin-top: auto;
+
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+
   padding-top: 1rem;
+
   border-top: 1px solid var(--border-color);
-}
+
+  flex-shrink: 0;
+} 
 
 .theme-switch-btn {
   display: flex;
