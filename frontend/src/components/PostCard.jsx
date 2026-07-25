@@ -2,19 +2,27 @@ import { useState } from "react";
 import {
   Heart,
   MessageCircle,
-  Bookmark,
   Share2,
+  Trash2,
 } from "lucide-react";
 
-import { likePost } from "../api/posts/postApi";
+import { useAuth } from "../context/AuthContext";
+import {
+  likePost,
+  deletePost,
+} from "../api/posts/postApi";
 import { toggleBookmark } from "../api/bookmarks/bookmarkApi";
 import CommentSection from "./CommentSection";
 
 import "./PostCard.css";
 
 const PostCard = ({ post }) => {
+  const { user } = useAuth();
+
   const [likes, setLikes] = useState(post.likes?.length || 0);
-  const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
+  const [commentsCount, setCommentsCount] = useState(
+    post.commentsCount || 0
+  );
   const [showComments, setShowComments] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -35,11 +43,30 @@ const PostCard = ({ post }) => {
   const handleBookmark = async () => {
     try {
       const data = await toggleBookmark(post._id);
-
       setBookmarked(data.isBookmarked);
     } catch (err) {
       console.error(err);
       alert("Failed to bookmark post");
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deletePost(post._id);
+
+      alert("Post deleted successfully");
+
+      // We'll improve this in the next step
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to delete post");
     }
   };
 
@@ -57,9 +84,30 @@ const PostCard = ({ post }) => {
           className="post-avatar"
         />
 
-        <div>
-          <h4>{post.user?.name}</h4>
-          <small>@{post.user?.username}</small>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <div>
+            <h4>{post.user?.name}</h4>
+            <small>@{post.user?.username}</small>
+          </div>
+
+          {user?._id === post.user?._id && (
+            <button
+              onClick={handleDelete}
+              title="Delete Post"
+              style={{
+                color: "red",
+              }}
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -93,11 +141,14 @@ const PostCard = ({ post }) => {
 
       {showComments && (
         <CommentSection
-          postId={post._id}
-          onCommentAdded={() =>
-            setCommentsCount((prev) => prev + 1)
-          }
-        />
+  postId={post._id}
+  onCommentAdded={() =>
+    setCommentsCount((prev) => prev + 1)
+  }
+  onCommentDeleted={() =>
+    setCommentsCount((prev) => Math.max(prev - 1, 0))
+  }
+/>
       )}
     </div>
   );

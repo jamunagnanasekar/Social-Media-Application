@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
+import { Trash2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 import {
   getComments,
   addComment,
+  deleteComment,
 } from "../api/comments/commentApi";
 
-const CommentSection = ({ postId, onCommentAdded }) => {
+const CommentSection = ({
+  postId,
+  onCommentAdded,
+  onCommentDeleted,
+}) => {
+  const { user } = useAuth();
+
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
 
@@ -34,13 +43,32 @@ const CommentSection = ({ postId, onCommentAdded }) => {
 
       fetchComments();
 
-      // Update comment count in PostCard
       if (onCommentAdded) {
         onCommentAdded();
       }
-
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    const confirmDelete = window.confirm(
+      "Delete this comment?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteComment(commentId);
+
+      fetchComments();
+
+      if (onCommentDeleted) {
+        onCommentDeleted();
+      }
+    } catch (err) {
+      console.log(err);
+      alert("Failed to delete comment");
     }
   };
 
@@ -53,11 +81,25 @@ const CommentSection = ({ postId, onCommentAdded }) => {
             marginBottom: "10px",
             padding: "8px 0",
             borderBottom: "1px solid var(--border-color)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
           }}
         >
-          <strong>{comment.user?.name}</strong>
+          <div>
+            <strong>{comment.user?.name}</strong>
+            <p>{comment.text}</p>
+          </div>
 
-          <p>{comment.text}</p>
+          {user?._id === comment.user?._id && (
+            <button
+              onClick={() => handleDelete(comment._id)}
+              title="Delete Comment"
+              style={{ color: "red" }}
+            >
+              <Trash2 size={16} />
+            </button>
+          )}
         </div>
       ))}
 

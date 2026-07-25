@@ -1,69 +1,164 @@
+import { useState } from "react";
 import { Edit } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { followUser } from "../api/users/userAPI";
+import EditProfileModal from "./EditProfileModal";
 
-const ProfileHeader = ({ user }) => {
+const ProfileHeader = ({ user, refreshProfile }) => {
+  const { user: currentUser } = useAuth();
+
+  const [open, setOpen] = useState(false);
+
+  const [followers, setFollowers] = useState(
+    user?.followers?.length || 0
+  );
+
+  const [isFollowing, setIsFollowing] = useState(
+    user?.followers?.includes(currentUser?._id)
+  );
+
+  const isOwnProfile = currentUser?._id === user?._id;
+
+  const profilePic = user?.profilePic
+    ? `http://localhost:5000${user.profilePic}`
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        user?.name || "User"
+      )}&background=4F46E5&color=fff`;
+
+  const coverPic = user?.coverPic
+    ? `http://localhost:5000${user.coverPic}`
+    : null;
+
+  const handleFollow = async () => {
+    try {
+      const res = await followUser(user._id);
+
+      if (res.isFollowing) {
+        setFollowers((prev) => prev + 1);
+      } else {
+        setFollowers((prev) => prev - 1);
+      }
+
+      setIsFollowing(res.isFollowing);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
-    <div className="card">
+    <>
       <div
+        className="card"
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "24px",
+          overflow: "hidden",
+          padding: 0,
         }}
       >
-        <img
-          src={
-            user?.profilePic ||
-            `https://ui-avatars.com/api/?name=${user?.name}&background=4F46E5&color=fff`
-          }
-          alt={user?.name}
+        <div
           style={{
-            width: "110px",
-            height: "110px",
-            borderRadius: "50%",
-            objectFit: "cover",
+            height: 180,
+            background: coverPic
+              ? `url(${coverPic}) center/cover`
+              : "#dbe4ff",
           }}
         />
 
-        <div style={{ flex: 1 }}>
-          <h2>{user?.name}</h2>
-
-          <p
-            style={{
-              color: "var(--text-secondary)",
-              marginTop: "4px",
-            }}
-          >
-            @{user?.username}
-          </p>
-
-          <p
-            style={{
-              marginTop: "16px",
-              color: "var(--text-secondary)",
-            }}
-          >
-            {user?.bio || "No bio added yet."}
-          </p>
-
+        <div style={{ padding: 30 }}>
           <div
             style={{
               display: "flex",
-              gap: "24px",
-              marginTop: "18px",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
             }}
           >
-            <strong>{user?.postsCount || 0} Posts</strong>
-            <strong>{user?.followersCount || 0} Followers</strong>
-            <strong>{user?.followingCount || 0} Following</strong>
+            <div
+              style={{
+                display: "flex",
+                gap: 20,
+              }}
+            >
+              <img
+                src={profilePic}
+                alt={user?.name}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  marginTop: -80,
+                  border: "5px solid white",
+                }}
+              />
+
+              <div>
+                <h2>{user?.name}</h2>
+
+                <p
+                  style={{
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  @{user?.username}
+                </p>
+
+                <p
+                  style={{
+                    marginTop: 15,
+                  }}
+                >
+                  {user?.bio || "No bio added yet."}
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 30,
+                    marginTop: 20,
+                  }}
+                >
+                  <strong>
+                    {user?.postsCount || 0} Posts
+                  </strong>
+
+                  <strong>
+                    {followers} Followers
+                  </strong>
+
+                  <strong>
+                    {user?.following?.length || 0} Following
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            {isOwnProfile ? (
+              <button
+                className="btn btn-secondary"
+                onClick={() => setOpen(true)}
+              >
+                <Edit size={18} />
+                Edit Profile
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary"
+                onClick={handleFollow}
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </button>
+            )}
           </div>
         </div>
-
-        <button className="btn btn-secondary">
-          <Edit size={18} />
-          Edit Profile
-        </button>
       </div>
-    </div>
+
+      {open && (
+        <EditProfileModal
+          user={user}
+          refreshProfile={refreshProfile}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
