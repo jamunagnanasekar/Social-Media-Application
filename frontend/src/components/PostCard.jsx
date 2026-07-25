@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  Heart,
-  MessageCircle,
   Share2,
   Trash2,
 } from "lucide-react";
@@ -13,10 +11,13 @@ import {
   likePost,
   deletePost,
 } from "../api/posts/postApi";
-import { toggleBookmark } from "../api/bookmarks/bookmarkAPI";
+import { toggleBookmark } from "../api/bookmarks/bookmarkApi";
 import CommentSection from "./CommentSection";
 
 import "./PostCard.css";
+
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const PostCard = ({ post }) => {
   const { user } = useAuth();
@@ -29,15 +30,12 @@ const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
-  // Backend URL from Vercel Environment Variable
-  const API_URL = import.meta.env.VITE_API_URL;
-
-  // Post Image URL
+  // Fix post image URL
   const imageUrl = post.image
     ? `${API_URL}${post.image}`
     : null;
 
-  // Profile Picture URL
+  // Fix profile picture URL
   const profilePic = post.user?.profilePic
     ? `${API_URL}${post.user.profilePic}`
     : `https://ui-avatars.com/api/?name=${encodeURIComponent(
@@ -65,15 +63,10 @@ const PostCard = ({ post }) => {
   };
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-
-    if (!confirmDelete) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
 
     try {
       await deletePost(post._id);
-
       toast.success("Post deleted successfully");
 
       setTimeout(() => {
@@ -143,8 +136,8 @@ const PostCard = ({ post }) => {
       {imageUrl && (
         <img
           src={imageUrl}
-          className="post-image"
           alt="Post"
+          className="post-image"
         />
       )}
 
@@ -181,4 +174,4 @@ const PostCard = ({ post }) => {
   );
 };
 
-export default PostCard;  
+export default PostCard;
