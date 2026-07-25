@@ -20,15 +20,19 @@ const ProfileHeader = ({ user, refreshProfile }) => {
 
   const isOwnProfile = currentUser?._id === user?._id;
 
-  const profilePic = user?.profilePic
-    ? `http://localhost:5000${user.profilePic}`
-    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        user?.name || "User"
-      )}&background=4F46E5&color=fff`;
+  const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://connecthub-backend-6bv6.onrender.com";
 
-  const coverPic = user?.coverPic
-    ? `http://localhost:5000${user.coverPic}`
-    : null;
+const profilePic = user?.profilePic
+  ? `${API_URL}${user.profilePic}`
+  : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      user?.name || "User"
+    )}&background=4F46E5&color=fff`;
+
+const coverPic = user?.coverPic
+  ? `${API_URL}${user.coverPic}`
+  : null;
 
   const handleFollow = async () => {
     try {

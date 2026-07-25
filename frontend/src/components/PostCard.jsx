@@ -17,7 +17,8 @@ import CommentSection from "./CommentSection";
 import "./PostCard.css";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_URL ||
+  "https://connecthub-backend-6bv6.onrender.com";
 
 const PostCard = ({ post }) => {
   const { user } = useAuth();
