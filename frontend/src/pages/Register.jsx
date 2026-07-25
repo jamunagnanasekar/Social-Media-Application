@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import AuthLayout from "../layouts/AuthLayout";
 import Input from "../components/common/Input";
@@ -39,7 +40,7 @@ const Register = () => {
 
       navigate("/");
     } catch (err) {
-      alert(
+      toast.error(
         err?.response?.data?.message ||
           "Registration Failed"
       );
@@ -51,7 +52,7 @@ const Register = () => {
   return (
     <AuthLayout
       title="Create Account 🚀"
-      subtitle="Join ConnectHub"
+      description="Join ConnectHub"
     >
       <form onSubmit={handleSubmit}>
         <Input

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 import {
   getComments,
@@ -68,7 +69,7 @@ const CommentSection = ({
       }
     } catch (err) {
       console.log(err);
-      alert("Failed to delete comment");
+      toast.error("Failed to delete comment");
     }
   };
 

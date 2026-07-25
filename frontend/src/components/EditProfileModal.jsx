@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { updateProfile } from "../api/users/userAPI";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const EditProfileModal = ({
   user,
@@ -45,7 +46,7 @@ const EditProfileModal = ({
       onClose();
 
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,12 @@
 import API from "../axios";
 
-export const getAllPosts = async () => {
-  const response = await API.get("/posts");
+export const getAllPosts = async (tag = "") => {
+  const url = tag
+    ? `/posts?hashtag=${tag}`
+    : "/posts";
+
+  const response = await API.get(url);
+
   return response.data;
 };
 

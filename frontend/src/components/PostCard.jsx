@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   Heart,
   MessageCircle,
@@ -18,6 +20,7 @@ import "./PostCard.css";
 
 const PostCard = ({ post }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [likes, setLikes] = useState(post.likes?.length || 0);
   const [commentsCount, setCommentsCount] = useState(
@@ -36,7 +39,7 @@ const PostCard = ({ post }) => {
       setLikes(data.likesCount);
     } catch (err) {
       console.error(err);
-      alert("Failed to like post");
+      toast.error("Failed to like post");
     }
   };
 
@@ -46,7 +49,7 @@ const PostCard = ({ post }) => {
       setBookmarked(data.isBookmarked);
     } catch (err) {
       console.error(err);
-      alert("Failed to bookmark post");
+      toast.error("Failed to bookmark post");
     }
   };
 
@@ -60,19 +63,36 @@ const PostCard = ({ post }) => {
     try {
       await deletePost(post._id);
 
-      alert("Post deleted successfully");
+      toast.success("Post deleted successfully");
 
-      // We'll improve this in the next step
-      window.location.reload();
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 300);
     } catch (err) {
       console.error(err);
-      alert("Failed to delete post");
+      toast.error("Failed to delete post");
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/profile/${post.user?.username}`
+      );
+
+      toast.success("Profile link copied");
+    } catch (err) {
+      toast.error("Failed to copy link");
     }
   };
 
   return (
     <div className="card post-card">
-      <div className="post-header">
+      <div
+        className="post-header"
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate(`/profile/${post.user?.username}`)}
+      >
         <img
           src={
             post.user?.profilePic ||
@@ -99,11 +119,12 @@ const PostCard = ({ post }) => {
 
           {user?._id === post.user?._id && (
             <button
-              onClick={handleDelete}
-              title="Delete Post"
-              style={{
-                color: "red",
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
               }}
+              title="Delete Post"
+              style={{ color: "red" }}
             >
               <Trash2 size={18} />
             </button>
@@ -134,21 +155,21 @@ const PostCard = ({ post }) => {
           {bookmarked ? "📌" : "🔖"}
         </button>
 
-        <button>
+        <button onClick={handleShare}>
           <Share2 size={18} />
         </button>
       </div>
 
       {showComments && (
         <CommentSection
-  postId={post._id}
-  onCommentAdded={() =>
-    setCommentsCount((prev) => prev + 1)
-  }
-  onCommentDeleted={() =>
-    setCommentsCount((prev) => Math.max(prev - 1, 0))
-  }
-/>
+          postId={post._id}
+          onCommentAdded={() =>
+            setCommentsCount((prev) => prev + 1)
+          }
+          onCommentDeleted={() =>
+            setCommentsCount((prev) => Math.max(prev - 1, 0))
+          }
+        />
       )}
     </div>
   );

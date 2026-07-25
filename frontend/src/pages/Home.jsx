@@ -34,9 +34,13 @@ const Home = () => {
     <MainLayout>
       <CreatePost onPostCreated={fetchPosts} />
 
-      {loading ? (
-        <Loader />
-      ) : posts.length === 0 ? (
+     {loading ? (
+  <>
+    <Loader />
+    <Loader />
+    <Loader />
+  </>
+) : posts.length === 0 ? (
         <EmptyState
           title="No posts yet"
           description="Create your first post."

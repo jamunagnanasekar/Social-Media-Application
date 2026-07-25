@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
+import Explore from "./pages/Explore";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
@@ -19,6 +20,15 @@ function App() {
         element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/explore"
+        element={
+          <ProtectedRoute>
+            <Explore />
           </ProtectedRoute>
         }
       />
@@ -73,4 +83,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

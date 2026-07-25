@@ -81,7 +81,7 @@ const RightPanel = () => {
                 key={user._id}
                 className="search-item"
                 onClick={() => {
-                  setSearchQuery('');
+                  setSearchQuery("");
                   setSearchResults([]);
                   navigate(`/profile/${user.username}`);
                 }}

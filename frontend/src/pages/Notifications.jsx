@@ -61,8 +61,12 @@ const Notifications = () => {
       </div>
 
       {loading ? (
-        <Loader />
-      ) : notifications.length === 0 ? (
+  <>
+    <Loader />
+    <Loader />
+    <Loader />
+  </>
+) : notifications.length === 0 ? (  
         <EmptyState
           title="No notifications"
           description="You're all caught up."

@@ -3,6 +3,7 @@ import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { followUser } from "../api/users/userAPI";
 import EditProfileModal from "./EditProfileModal";
+import toast from "react-hot-toast";
 
 const ProfileHeader = ({ user, refreshProfile }) => {
   const { user: currentUser } = useAuth();
@@ -41,7 +42,7 @@ const ProfileHeader = ({ user, refreshProfile }) => {
 
       setIsFollowing(res.isFollowing);
     } catch (err) {
-      alert(err.message);
+      toast.error(err.message);
     }
   };
 

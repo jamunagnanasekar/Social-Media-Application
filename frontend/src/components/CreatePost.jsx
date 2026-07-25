@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ImagePlus, Send } from "lucide-react";
 import { createPost } from "../api/posts/postApi";
 import "./CreatePost.css";
+import toast from "react-hot-toast";
 
 const CreatePost = ({ onPostCreated }) => {
   const [caption, setCaption] = useState("");
@@ -35,7 +36,7 @@ const CreatePost = ({ onPostCreated }) => {
 
     } catch (err) {
       console.error(err);
-      alert("Failed to create post");
+      toast.error("Failed to create post");
     } finally {
       setLoading(false);
     }

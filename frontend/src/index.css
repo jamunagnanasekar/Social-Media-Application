@@ -246,3 +246,56 @@ input, textarea, select {
     display: none;
   }
 }
+
+/* ===========================
+   Mobile Responsive
+=========================== */
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+textarea {
+  resize: vertical;
+}
+
+@media (max-width: 768px) {
+
+  .main-content {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .post-actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .post-actions button {
+    flex: 1;
+  }
+
+  .post-header {
+    gap: 10px;
+  }
+
+  .post-avatar {
+    width: 42px;
+    height: 42px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    word-break: break-word;
+  }
+}
