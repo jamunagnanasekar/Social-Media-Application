@@ -1,24 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import {
-  Share2,
-  Trash2,
-} from "lucide-react";
+import { Share2, Trash2 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
-import {
-  likePost,
-  deletePost,
-} from "../api/posts/postApi";
+import { likePost, deletePost } from "../api/posts/postApi";
 import { toggleBookmark } from "../api/bookmarks/bookmarkApi";
 import CommentSection from "./CommentSection";
 
 import "./PostCard.css";
-
-const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://connecthub-backend-6bv6.onrender.com";
 
 const PostCard = ({ post }) => {
   const { user } = useAuth();
@@ -31,14 +21,11 @@ const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
-  // Fix post image URL
-  const imageUrl = post.image
-    ? `${API_URL}${post.image}`
-    : null;
+  // Cloudinary returns full HTTPS URLs
+  const imageUrl = post.image || null;
 
-  // Fix profile picture URL
   const profilePic = post.user?.profilePic
-    ? `${API_URL}${post.user.profilePic}`
+    ? post.user.profilePic
     : `https://ui-avatars.com/api/?name=${encodeURIComponent(
         post.user?.name || "User"
       )}&background=4F46E5&color=fff`;
@@ -68,6 +55,7 @@ const PostCard = ({ post }) => {
 
     try {
       await deletePost(post._id);
+
       toast.success("Post deleted successfully");
 
       setTimeout(() => {

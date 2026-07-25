@@ -20,19 +20,14 @@ const ProfileHeader = ({ user, refreshProfile }) => {
 
   const isOwnProfile = currentUser?._id === user?._id;
 
-  const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://connecthub-backend-6bv6.onrender.com";
+  // Cloudinary returns complete HTTPS URLs
+  const profilePic = user?.profilePic
+    ? user.profilePic
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        user?.name || "User"
+      )}&background=4F46E5&color=fff`;
 
-const profilePic = user?.profilePic
-  ? `${API_URL}${user.profilePic}`
-  : `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      user?.name || "User"
-    )}&background=4F46E5&color=fff`;
-
-const coverPic = user?.coverPic
-  ? `${API_URL}${user.coverPic}`
-  : null;
+  const coverPic = user?.coverPic || null;
 
   const handleFollow = async () => {
     try {
@@ -121,17 +116,11 @@ const coverPic = user?.coverPic
                     marginTop: 20,
                   }}
                 >
-                  <strong>
-                    {user?.postsCount || 0} Posts
-                  </strong>
+                  <strong>{user?.postsCount || 0} Posts</strong>
 
-                  <strong>
-                    {followers} Followers
-                  </strong>
+                  <strong>{followers} Followers</strong>
 
-                  <strong>
-                    {user?.following?.length || 0} Following
-                  </strong>
+                  <strong>{user?.following?.length || 0} Following</strong>
                 </div>
               </div>
             </div>

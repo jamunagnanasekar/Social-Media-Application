@@ -24,9 +24,10 @@ export const createPost = async (req, res, next) => {
     }
 
     let imagePath = '';
-    if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
-    }
+
+if (req.file) { 
+  imagePath = req.file.path;
+}
 
     const hashtags = extractHashtags(content);
 
