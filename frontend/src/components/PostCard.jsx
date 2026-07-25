@@ -29,9 +29,20 @@ const PostCard = ({ post }) => {
   const [showComments, setShowComments] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
+  // Backend URL from Vercel Environment Variable
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Post Image URL
   const imageUrl = post.image
-    ? `http://localhost:5000${post.image}`
+    ? `${API_URL}${post.image}`
     : null;
+
+  // Profile Picture URL
+  const profilePic = post.user?.profilePic
+    ? `${API_URL}${post.user.profilePic}`
+    : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        post.user?.name || "User"
+      )}&background=4F46E5&color=fff`;
 
   const handleLike = async () => {
     try {
@@ -94,12 +105,7 @@ const PostCard = ({ post }) => {
         onClick={() => navigate(`/profile/${post.user?.username}`)}
       >
         <img
-          src={
-            post.user?.profilePic ||
-            `https://ui-avatars.com/api/?name=${encodeURIComponent(
-              post.user?.name || "User"
-            )}&background=4F46E5&color=fff`
-          }
+          src={profilePic}
           alt={post.user?.name}
           className="post-avatar"
         />
@@ -175,4 +181,4 @@ const PostCard = ({ post }) => {
   );
 };
 
-export default PostCard;
+export default PostCard;  
