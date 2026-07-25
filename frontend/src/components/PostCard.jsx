@@ -13,7 +13,7 @@ import {
   likePost,
   deletePost,
 } from "../api/posts/postApi";
-import { toggleBookmark } from "../api/bookmarks/bookmarkApi";
+import { toggleBookmark } from "../api/bookmarks/bookmarkAPI";
 import CommentSection from "./CommentSection";
 
 import "./PostCard.css";

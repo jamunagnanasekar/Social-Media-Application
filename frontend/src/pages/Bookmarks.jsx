@@ -5,7 +5,7 @@ import PostCard from "../components/PostCard";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 
-import { getBookmarks } from "../api/bookmarks/bookmarkApi";
+import { getBookmarks } from "../api/bookmarks/bookmarkAPI";
 
 const Bookmarks = () => {
   const [posts, setPosts] = useState([]);
