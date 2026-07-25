@@ -1,4 +1,5 @@
 import Profile from "./pages/Profile";
+import Bookmarks from "./pages/Bookmarks";
 import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -21,7 +22,14 @@ function App() {
       </ProtectedRoute>
     }
   />
-
+<Route
+  path="/bookmarks"
+  element={
+    <ProtectedRoute>
+      <Bookmarks />
+    </ProtectedRoute>
+  }
+/>
   {/* Add this here */}
   <Route
     path="/profile/:username"

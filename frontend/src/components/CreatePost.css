@@ -1,0 +1,23 @@
+.create-post textarea{
+    width:100%;
+    min-height:120px;
+    resize:none;
+    padding:15px;
+    border:1px solid var(--border-color);
+    border-radius:12px;
+    background:var(--bg-primary);
+    color:var(--text-primary);
+    font-size:15px;
+    outline:none;
+}
+
+.create-post textarea:focus{
+    border-color:var(--accent-color);
+}
+
+.create-post-footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:15px;
+}
